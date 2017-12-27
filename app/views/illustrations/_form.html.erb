@@ -1,0 +1,116 @@
+<%= form_with(model: illustration, local: true) do |form| %>
+  <% if illustration.errors.any? %>      
+      <% illustration.errors.full_messages.each do |message| %>
+        <div class="alert alert-danger" role="alert">
+          <%= message %>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+      <% end %>
+  <% end %>
+
+  <div class="form-group">
+    <%= form.label :title %>
+    <%= form.text_field :title, id: :illustration_title, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :author %>
+    <%= form.text_field :author, id: :illustration_author, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :source %>
+    <%= form.text_field :source, id: :illustration_source, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :tags %>
+    <%= form.text_field :tags, id: :illustration_tags, value: @tagValue, class: "form-control" %>
+  </div>
+
+  <div class="form-group">
+    <%= form.label :content %>
+    <%= form.text_area :content, id: :illustration_content, class: "form-control", rows: 16 %>
+  </div>
+
+  <div class="form-group">
+    <%= form.submit class: 'btn btn-primary' %>
+    <!-- <input type="submit" name="commit" value="Create Illustration" data-disable-with="Create Illustration" class="btn btn-primary"> -->
+    <%= link_to 'Back', :back, class: 'btn btn-link' %>
+  </div>
+<% end %>
+
+
+<script>
+$.widget("ui.autocomplete", $.ui.autocomplete, {
+
+  _resizeMenu: function() {
+    var ul = this.menu.element;
+    // resizing width by 25px
+    ul.outerWidth(Math.max(
+      // Firefox wraps long text (possibly a rounding bug)
+      // so we add 1px to avoid the wrapping (#7513)
+      ul.width("").outerWidth() + 1,
+      this.element.outerWidth()
+    )-25);
+  }
+
+});
+
+  $( function() {
+    function split( val ) {
+      return val.split( /,\s*/ );
+    }
+    function extractLast( term ) {
+      return split( term ).pop();
+    }
+ 
+    $( "#illustration_tags" )
+      // don't navigate away from the field on tab when selecting an item
+      .on( "keydown", function( event ) {
+        if ( event.keyCode === $.ui.keyCode.TAB &&
+            $( this ).autocomplete( "instance" ).menu.active ) {
+          event.preventDefault();
+        }
+      })
+      .autocomplete({
+        position: { my : "left top-15", at: "left bottom" },
+        source: function( request, response ) {
+          $.getJSON( "/tags/search", {
+            term: extractLast( request.term )
+          }, response );
+        },
+        search: function() {
+          // custom minLength
+          var term = extractLast( this.value );
+          if ( term.length < 1 ) {
+            return false;
+          }
+        },
+        focus: function() {
+          // prevent value inserted on focus
+          return false;
+        },
+        select: function( event, ui ) {
+          var terms = split( this.value );
+          // remove the current input
+          terms.pop();
+          // add the selected item
+          terms.push( ui.item.name );
+          // add placeholder to get the comma-and-space at the end
+          terms.push( "" );
+          this.value = terms.join( ", " );
+          return false;
+        }
+      })
+      .autocomplete( "instance" )._renderItem = function( ul, item ) {
+            return $( "<li></li>" )
+                .data( "item.autocomplete", item )
+                .append('<div class="ui-menu-item-wrapper">' + item.name + '</div>')
+                .appendTo( ul );
+        }
+      ;
+  } );
+  </script>

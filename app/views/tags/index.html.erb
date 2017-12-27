@@ -1,0 +1,17 @@
+
+
+<h1>Tags</h1>
+
+<table class="table table-borderless">
+  <tbody>
+
+     <% 0.upto(@rows_per_column-1).each do |row| %>
+      <tr>
+        <% 0.upto(2).each do |column| %>
+        <% index = row + (column * @rows_per_column) %>
+        <td><%= link_to @tags[index].name, @tags[index] unless index >= @tags.count %></td>
+        <% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

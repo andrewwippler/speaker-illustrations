@@ -1,0 +1,15 @@
+<h1>Search Results</h1>
+<div>
+<% unless @search_results.empty? or @q.empty? %>
+<p>Searched for "<%= @q %>"</p>
+
+  <% @search_results.each do |sr| %>
+    <p><%= link_to sr.title, sr %> <% unless sr.author.empty? -%>- <%= sr.author -%><% end -%><br />
+    <%= sr.content.html_safe %></p>
+  <% end %>
+
+<% else %>
+    <p>Nothing found for "<%= @q %>"</p>
+  
+<% end %>
+</div>

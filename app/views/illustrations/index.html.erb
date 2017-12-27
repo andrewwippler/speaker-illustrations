@@ -1,0 +1,30 @@
+
+<h1>Illustrations</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Author</th>
+      <th>Source</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @illustrations.each do |illustration| %>
+      <tr>
+        <td><%= illustration.title %></td>
+        <td><%= illustration.author %></td>
+        <td><%= illustration.source %></td>
+        <td><%= link_to 'Show', illustration %></td>
+        <td><%= link_to 'Edit', edit_illustration_path(illustration) %></td>
+        <td><%= link_to 'Delete', illustration, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Illustration', new_illustration_path %>

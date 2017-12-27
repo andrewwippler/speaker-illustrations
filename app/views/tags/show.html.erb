@@ -1,0 +1,20 @@
+
+<h1><%= @tag.name %></h1>
+<p>
+<%= link_to content_tag(:i, ' Edit Tag', :class => "fa fa-pencil"), edit_tag_path(@tag), class: 'btn btn-success' %> 
+<%= link_to content_tag(:i, ' Delete Tag', :class => "fa fa-trash-o"), tag_path(@tag), class: 'btn btn-danger', :method => :delete,  data: {:confirm => "Delete this tag?\n\n(Note: does not delete illustrations)"} %> 
+</p>
+
+<p>
+<% @tag.illustrations.each do |ill| %>
+<%= link_to ill.title, ill, title: ill.content %> <% unless ill.author.empty? %>- <%= ill.author %><% end %><br />
+<% end %>
+</p>
+
+
+
+<script>
+$( function() {
+  $( document ).tooltip();
+} );
+</script>

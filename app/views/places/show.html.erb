@@ -1,0 +1,20 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Place:</strong>
+  <%= @place.place %>
+</p>
+
+<p>
+  <strong>Location:</strong>
+  <%= @place.location %>
+</p>
+
+<p>
+  <strong>Used:</strong>
+  <%= @place.used %>
+</p>
+
+<%= link_to 'Edit', edit_place_path(@place) %> |
+<%= link_to 'Back', :back, class: 'btn btn-link' %>
+
