@@ -1,46 +1,83 @@
 <div class="row ill-header bg-light">
-    <div class="col-xs-12 col-sm-6">
-        <strong>Title:</strong><br />
-        <%= @illustration.title %> 
-    </div>
+  <div class="col-xs-12 col-sm-6">
+    <strong>Title:</strong><br />
+    <%= @illustration.title %> 
+  </div>
 
-    <% unless @illustration.author.empty? %>
-    <div class="col-xs-12 col-sm-6">
-        <strong>Author:</strong><br />
-        <%= @illustration.author %>
-    </div>
+  <% unless @illustration.author.empty? %>
+  <div class="col-xs-12 col-sm-6">
+    <strong>Author:</strong><br />
+    <%= @illustration.author %>
+  </div>
+  <% end %>
+
+  <% unless @illustration.source.empty? %>
+  <div class="col-xs-12 col-sm-6">
+    <strong>Source:</strong><br />
+    <%= @illustration.source %>
+  </div>
+  <% end %>
+
+  <div class="col-xs-12 col-sm-6">
+    <strong>Tags:</strong><br />
+    <% for index in (@tag_links.count).downto(1) %>
+        <%= link_to @tag_links[index-1].name, @tag_links[index-1] %><% unless index == 1 %>, <% end %>
     <% end %>
-
-    <% unless @illustration.source.empty? %>
-    <div class="col-xs-12 col-sm-6">
-        <strong>Source:</strong><br />
-        <%= @illustration.source %>
-    </div>
-    <% end %>
-
-    <div class="col-xs-12 col-sm-6">
-        <strong>Tags:</strong><br />
-        <% for index in (@tag_links.count).downto(1) %>
-            <%= link_to @tag_links[index-1].name, @tag_links[index-1] %><% unless index == 1 %>, <% end %>
-        <% end %>
-    </div>
+  </div>
 </div>
 
 <div class="row">
-    <div class="col-sm-12">
-    <button type="button" data-toggle="tooltip" data-placement="bottom" title="Copy to clipboard"
-     class="btn btn-lg btn-secondary btn-block js-copy"><i class="fa fa-copy"></i> Copy</button>
-    </div>
-    <div class="col-sm-12" id="illustrationContent">
-    <%= simple_format @illustration.content %>
+  <div class="col-sm-12">
+  <button type="button" data-toggle="tooltip" data-placement="bottom" title="Copy to clipboard"
+    class="btn btn-lg btn-secondary btn-block js-copy"><i class="fa fa-copy"></i> Copy</button>
+  </div>
+  <div class="col-sm-12" id="illustrationContent">
+  <%= simple_format @illustration.content %>
+  </div>
+
+  <div class="col-sm-12">
+  <%= link_to 'Back', :back, class: 'btn btn-link' %>
+  <%= link_to content_tag(:i, ' Edit Illustration', :class => "fa fa-pencil"), edit_illustration_path(@illustration), class: 'btn btn-success' %> 
+  <%= link_to content_tag(:i, ' Delete Illustration', :class => "fa fa-trash-o"), illustration_path(@illustration), class: 'btn btn-danger', :method => :delete,  data: {:confirm => 'Delete this illustration?'} %> 
+  </div>
+</div>
+
+  <div class="row">
+    <div class="col-sm-12" id="illustrationPlaces">
+      <h3>Illustration Usage:</h3>
+      <% unless @places.empty? %>
+        <% @places.each do |p| %>
+          <% unless p.place.blank? %><%= p.place %>, <% end %><% unless p.location.blank? %><%= p.location %> - <% end %><% unless p.used.blank? %><%= p.used.strftime("%m/%d/%Y") %><% end %><br />
+        <% end %>
+      <% end %>
     </div>
 
-    <div class="col-sm-12">
-    <%= link_to 'Back', :back, class: 'btn btn-link' %>
-    <%= link_to content_tag(:i, ' Edit Illustration', :class => "fa fa-pencil"), edit_illustration_path(@illustration), class: 'btn btn-success' %> 
-    <%= link_to content_tag(:i, ' Delete Illustration', :class => "fa fa-trash-o"), illustration_path(@illustration), class: 'btn btn-danger', :method => :delete,  data: {:confirm => 'Delete this illustration?'} %> 
-    </div>
-</div>
+        <div class="col-sm-4">
+        <%= form_with(model: Place, id: :places_form) do |form| %>
+          <input type="hidden" value="<%= @illustration.id %>" name="place[illustration_id]">
+          <div class="form-group">
+            <%= form.text_field :place, id: :place_place, class: "form-control", placeholder: "Place" %>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <%= form.text_field :location, id: :place_location, class: "form-control", placeholder: "Location" %>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="form-group">
+            <%= form.text_field :used, id: :place_used, class: "form-control", value: Time.now.strftime("%m/%d/%Y")  %>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Add Place</button>
+          </div>
+        </div>
+        <% end %>
+
+  </div>
+
 
 <script>
 // COPY TO CLIPBOARD
@@ -90,5 +127,42 @@ $(document).ready(function() {
     var el = $(this);
     copyToClipboard(text, el);
   });
+});
+
+
+// places form
+$('#places_form').submit(function(event) {  
+    event.preventDefault();
+
+    var valuesToSubmit = $(this).serialize();
+    request = $.ajax({
+        type: "POST",
+        url: $(this).attr('action'), //sumbits it to the given url of the form
+        data: valuesToSubmit,
+        dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
+    });
+
+  var place = $('#place_place').val();
+  var location = $('#place_location').val();
+  var date = $('#place_used').val();
+
+  // Callback handler that will be called on success
+    request.done(function (response, textStatus, jqXHR){
+        // Log a message to the console
+        // console.log("Hooray, it worked!"); 
+        var string = `${place} ${location} ${date} </br>`
+        $('#illustrationPlaces').append( string );
+    });
+
+    // Callback handler that will be called on failure
+    request.fail(function (jqXHR, textStatus, errorThrown){
+        // Log the error to the console
+        console.error(
+            "The following error occurred: "+
+            textStatus, errorThrown
+        );
+    });
+
+    return false; // prevents normal behaviour
 });
 </script>

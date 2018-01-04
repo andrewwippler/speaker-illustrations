@@ -1,32 +1,24 @@
-<%= form_with(model: place, local: true) do |form| %>
-  <% if place.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(place.errors.count, "error") %> prohibited this place from being saved:</h2>
+    <div class="col-sm-4">
+    <%= form_with(model: Place) do |form| %>
+      <input type="hidden" value="1" name="illustration_id">
 
-      <ul>
-      <% place.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+        <div class="form-group">
+          <%= form.text_field :place, id: :place_place, class: "form-control", placeholder: "Place" %>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <%= form.text_field :location, id: :place_location, class: "form-control", placeholder: "Location" %>
+        </div>
+      </div>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <%= form.text_field :used, id: :place_used, class: "form-control", value: Time.now.strftime("%m/%d/%Y")  %>
+        </div>
+      </div>
+      <div class="col-sm-12">
+        <div class="form-group">
+          <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Add Place</button>
+        </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= form.label :place %>
-    <%= form.text_field :place, id: :place_place %>
-  </div>
-
-  <div class="field">
-    <%= form.label :location %>
-    <%= form.text_field :location, id: :place_location %>
-  </div>
-
-  <div class="field">
-    <%= form.label :used %>
-    <%= form.datetime_select :used, id: :place_used %>
-  </div>
-
-  <div class="actions">
-    <%= form.submit %>
-  </div>
-<% end %>
+    <% end %>

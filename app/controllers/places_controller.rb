@@ -9,8 +9,7 @@ class PlacesController < ApplicationController
 
   # GET /places/1
   # GET /places/1.json
-  def show
-  end
+  def show; end
 
   # GET /places/new
   def new
@@ -18,21 +17,22 @@ class PlacesController < ApplicationController
   end
 
   # GET /places/1/edit
-  def edit
-  end
+  def edit; end
 
   # POST /places
   # POST /places.json
   def create
     @place = Place.new(place_params)
 
+    # @place.used = @place.used.to_datetimed
+
     respond_to do |format|
       if @place.save
-        format.html { redirect_to @place, notice: 'Place was successfully created.' }
+        format.html { redirect_to "/illustrations/#{@place.illustration_id}", notice: 'Place was successfully added.' }
         format.json { render :show, status: :created, location: @place }
       else
         format.html { render :new }
-        format.json { render json: @place.errors, status: :unprocessable_entity }
+        format.json { render json: @illustration.errors, status: :unprocessable_entity }
       end
     end
   end
@@ -62,13 +62,14 @@ class PlacesController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_place
-      @place = Place.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def place_params
-      params.require(:place).permit(:place, :location, :used)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_place
+    @place = Place.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def place_params
+    params.require(:place).permit(:place, :location, :used, :illustration_id)
+  end
 end

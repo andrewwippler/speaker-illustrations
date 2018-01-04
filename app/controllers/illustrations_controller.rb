@@ -10,7 +10,9 @@ class IllustrationsController < ApplicationController
 
   # GET /illustrations/1
   # GET /illustrations/1.json
-  def show; end
+  def show
+    @places = Place.all.order(:used).where('illustration_id = ?', @illustration.id)
+  end
 
   # GET /illustrations/search?q=
   def search
@@ -62,7 +64,7 @@ class IllustrationsController < ApplicationController
       if @illustration.update(illustration_params)
         @illustration.tags.clear unless params[:illustration][:tags].empty? # empty tags make the illustration invisible
         params[:illustration][:tags].split(/\s*,\s*/).each do |t|
-          @illustration.tags << Tag.find_or_create_by(name: t) 
+          @illustration.tags << Tag.find_or_create_by(name: t)
         end
         format.html { redirect_to @illustration, notice: 'Illustration was successfully updated.' }
         format.json { render :show, status: :ok, location: @illustration }
