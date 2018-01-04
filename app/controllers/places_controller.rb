@@ -22,12 +22,8 @@ class PlacesController < ApplicationController
   # POST /places
   # POST /places.json
   def create
-    # Modify the used param so ruby knows how to interpret it
-    params = place_params
-    params[:used] = DateTime.strptime(params[:used], '%m/%d/%Y')
-    @place = Place.new(params)
-
-    # @place.used = @place.used.to_datetimed
+    @place = Place.new(place_params)
+    @place.used = Date.strptime(place_params[:used], '%m/%d/%Y')
 
     respond_to do |format|
       if @place.save
