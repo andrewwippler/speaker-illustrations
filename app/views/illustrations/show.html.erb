@@ -71,7 +71,7 @@
         </div>
         <div class="col-sm-12">
           <div class="form-group">
-            <button type="submit" class="btn btn-success"><i class="fa fa-plus"></i> Add Place</button>
+            <button id="add_place" class="btn btn-success"><i class="fa fa-plus"></i> Add Place</button>
           </div>
         </div>
         <% end %>
@@ -131,14 +131,22 @@ $(document).ready(function() {
 
 
 // places form
-$('#places_form').submit(function(event) {  
-    event.preventDefault();
-
-    var valuesToSubmit = $(this).serialize();
+$('#add_place').click(function(event) {  
+    // event.preventDefault();
+    // console.log("item clicked");
+    var all = $('#places_form').serializeArray();
+    
+    // Some JS bug was preventing all the items from being filled in.
+    if (all.length < 5) {
+      all.push({"name": "place[location]", "value": $('#place_location').val()})
+    }
+    if (all.length < 6) {
+      all.push({"name": "place[used]", "value": $('#place_used').val()})
+    }
     request = $.ajax({
         type: "POST",
-        url: $(this).attr('action'), //sumbits it to the given url of the form
-        data: valuesToSubmit,
+        url: $('#places_form').attr('action'), //sumbits it to the given url of the form
+        data: all,
         dataType: "JSON" // you want a difference between normal and ajax-calls, and json is standard
     });
 
