@@ -5,7 +5,8 @@ class TagsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     @tag = tags(:one)
-    sign_in users(:user_1)
+    # @request.env["devise.mapping"] = Devise.mappings[:user]
+    sign_in users(:one)
   end
 
   test "should get index" do

@@ -3,9 +3,9 @@
 one:
   place: MyString
   location: MyString
-  used: 2017-12-23 16:04:32
+  used: "01/14/2017"
 
 two:
   place: MyString
   location: MyString
-  used: 2017-12-23 16:04:32
+  used: "01/14/2017"

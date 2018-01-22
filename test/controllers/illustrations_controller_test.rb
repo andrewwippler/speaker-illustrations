@@ -5,7 +5,7 @@ class IllustrationsControllerTest < ActionDispatch::IntegrationTest
 
   setup do
     @illustration = illustrations(:one)
-    sign_in users(:user_1)
+    sign_in users(:one)
   end
 
   test "should get index" do
