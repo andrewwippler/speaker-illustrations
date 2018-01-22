@@ -1,7 +1,13 @@
 FROM ruby:2.4.3
+LABEL maintainer="Andrew Wippler <andrew.wippler@gmail.com>"
 
-ENV RAILS_ENV production
-ENV SECRET_KEY_BASE xpto
+ENV RAILS_ENV=production \
+    SECRET_KEY_BASE=xptod \
+    RAILS_DB=speaker_illus \
+    RAILS_DB_USER=user \
+    RAILS_DB_PASS=pass \
+    RAILS_REDIS=redis \
+    RAILS_REDIS_CHAN=SpeakerIllustrations_prod
 
 RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get update && \
