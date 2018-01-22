@@ -18,18 +18,29 @@
   </button>
 
   <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+
+
+    <% if user_signed_in? %>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="/">All Tags</a>
+        </li>
+        <li class="nav-item">
+          <%= link_to 'New Illustration', new_illustration_path, class: "nav-link" %>
+        </li>
+      </ul>
+      <form class="form-inline my-2 my-lg-0" action="/illustrations/search" method="GET">
+        <input name="q" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+        <button class="btn btn-light-success my-2 my-sm-0" type="submit">Search</button>
+      </form>
+    <% else %>
+
     <ul class="navbar-nav mr-auto">
-    <li class="nav-item">
-        <a class="nav-link" href="/">All Tags</a>
-      </li>
-      <li class="nav-item">
-        <%= link_to 'New Illustration', new_illustration_path, class: "nav-link" %>
+      <li>
+      <%= link_to 'Speaker Illustrations', new_user_session_path, class: "nav-link"   %>  
       </li>
     </ul>
-    <form class="form-inline my-2 my-lg-0" action="/illustrations/search" method="GET">
-      <input name="q" class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
-      <button class="btn btn-light-success my-2 my-sm-0" type="submit">Search</button>
-    </form>
+    <% end %>
   </div>
 </nav>
 
@@ -41,7 +52,7 @@
     </div><!-- /.container -->
 <footer class="footer">
       <div class="container">
-        <span class="text-muted">&copy; Copyright 2017 Andrew Wippler</span>
+        <span class="text-muted">&copy; Copyright 2017 Andrew Wippler</span> <% if user_signed_in? %> <%= link_to('Logout', destroy_user_session_path, method: :delete) %>    <% end %>
       </div>
 </footer>
   </body>

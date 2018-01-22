@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: { registrations: "registrations"}
   root 'tags#index'
   get 'illustrations/search' => 'illustrations#search'
   get 'tags/search' => 'tags#search'

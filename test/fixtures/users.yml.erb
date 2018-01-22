@@ -1,0 +1,5 @@
+<% 100.times do |n| %>
+user_<%= n %>:
+  email: <%= "user#{n}@example.com" %>
+  encrypted_password: <%= Devise.bcrypt(User, 'password') %>
+<% end %>

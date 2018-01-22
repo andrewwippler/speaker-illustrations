@@ -1,8 +1,11 @@
 require 'test_helper'
 
 class TagsControllerTest < ActionDispatch::IntegrationTest
+  include Devise::Test::IntegrationHelpers
+
   setup do
     @tag = tags(:one)
+    sign_in users(:user_1)
   end
 
   test "should get index" do
