@@ -49,6 +49,7 @@ class IllustrationsController < ApplicationController
         params[:illustration][:tags].split(/\s*,\s*/).each do |t|
           @illustration.tags << Tag.find_or_create_by(name: t) 
         end
+        @illustration.tags << Tag.find_or_create_by(name: 'Uncategorized') if @illustration.tags.empty?
         format.html { redirect_to @illustration, notice: 'Illustration was successfully created.' }
         format.json { render :show, status: :created, location: @illustration }
       else
@@ -67,6 +68,7 @@ class IllustrationsController < ApplicationController
         params[:illustration][:tags].split(/\s*,\s*/).each do |t|
           @illustration.tags << Tag.find_or_create_by(name: t)
         end
+        @illustration.tags << Tag.find_or_create_by(name: 'Uncategorized') if @illustration.tags.empty?
         format.html { redirect_to @illustration, notice: 'Illustration was successfully updated.' }
         format.json { render :show, status: :ok, location: @illustration }
       else
