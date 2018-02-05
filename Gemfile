@@ -61,6 +61,6 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 
 group :production do
-  gem 'pg', '~> 0.18'
+  gem 'mysql2', '>= 0.3.18', '< 0.5'
   gem "passenger"
 end

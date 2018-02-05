@@ -23,9 +23,10 @@ test:
 
 production:
   <<: *default
-  adapter: postgresql
-  encoding: unicode
+  adapter: mysql2
+  encoding: utf8
   database: <%= ENV.fetch("RAILS_DB", "speaker_illus") %>
   pool: 5
   username: <%= ENV.fetch("RAILS_DB_USER", "username") %>
   password: <%= ENV.fetch("RAILS_DB_PASS", "password") %>
+  host: <%= ENV.fetch("RAILS_DB_HOST", "localhost") %>
