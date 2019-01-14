@@ -52,7 +52,7 @@
     </div><!-- /.container -->
 <footer class="footer">
       <div class="container">
-        <span class="text-muted">&copy; Copyright 2017 Andrew Wippler</span> <% if user_signed_in? %> <%= link_to('Logout', destroy_user_session_path, method: :delete) %>    <% end %>
+        <span class="text-muted">&copy; Copyright 2017-<%= Time.current.year %> Andrew Wippler</span> <% if user_signed_in? %> <%= link_to('Logout', destroy_user_session_path, method: :delete) %>    <% end %>
       </div>
 </footer>
   </body>

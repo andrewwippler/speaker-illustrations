@@ -28,5 +28,6 @@ services:
       RAILS_REDIS: redis
       RAILS_REDIS_CHAN: SpeakerIllustrations_prod
       RAILS_DB_HOST: db
+      RAILS_ENV: development
     ports:
       - 8080:3000
