@@ -1,4 +1,4 @@
-FROM ruby:2.4.3
+FROM ruby:2.4.5
 LABEL maintainer="Andrew Wippler <andrew.wippler@gmail.com>"
 
 ENV RAILS_ENV=production \
@@ -23,6 +23,6 @@ WORKDIR /app
 ADD . .
 
 RUN gem update bundler --pre
-RUN bundle install --without development test
+RUN bundle install
 
 RUN RAILS_GROUPS=assets bundle exec rake assets:precompile
