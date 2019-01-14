@@ -9,6 +9,7 @@ docker-compose up
 docker-compose exec web ./bin/rails db:setup
 docker-compose exec web ./bin/rails db:seed
 ```
+Then access the web portion by visitng http://localhost:8080
 
 Note: 
 - prefix any rails commands with `docker-compose exec web ./bin/`.
