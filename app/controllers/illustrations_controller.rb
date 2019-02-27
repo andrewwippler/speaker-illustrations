@@ -19,13 +19,23 @@ class IllustrationsController < ApplicationController
   def search
     @q = params[:q]
     @search_results = []
+    @title_results = []
+    @tag_results = Tag.all.where('name LIKE ?', "%#{@q}%").order(:name)
     search_res = Illustration.order(:title)
-    search_res = search_res.where('title LIKE ? OR content LIKE ?', "%#{@q}%", "%#{@q}%")
+    content_res = search_res.where('content LIKE ?', "%#{@q}%")
+    title_res= = search_res.where('title LIKE ?', "%#{@q}%")
 
-    search_res.each do |sr|
+    content_res.each do |sr|
       sr.content = sr.content[0..250].gsub(/\s\w+\s*$/,'...').gsub(/#{@q}/i, "<b>#{@q}</b>")
       @search_results << sr
     end
+
+    title_res.each do |sr|
+      sr.title = sr.title.gsub(/\s\w+\s*$/,'...').gsub(/#{@q}/i, "<b>#{@q}</b>")
+      @title_results << sr
+    end
+
+
   end
 
   # GET /illustrations/new

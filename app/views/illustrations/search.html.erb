@@ -3,6 +3,17 @@
 <% unless @search_results.empty? or @q.empty? %>
 <p>Searched for "<%= @q %>"</p>
 
+  <h2>Tags</h2>
+  <% @tag_results.each do |sr| %>
+    <p><%= link_to sr.name, sr %><br />
+  <% end %>
+
+  <h2>Titles</h2>
+  <% @title_results.each do |sr| %>
+    <p><%= link_to sr.title, sr %> <% unless sr.author.empty? -%>- <%= sr.author -%><% end -%><br />
+  <% end %>
+
+  <h2>Content</h2>
   <% @search_results.each do |sr| %>
     <p><%= link_to sr.title, sr %> <% unless sr.author.empty? -%>- <%= sr.author -%><% end -%><br />
     <%= sr.content.html_safe %></p>
