@@ -20,6 +20,7 @@ jobs:
       - restore_cache:
           key: dependency-cache-{{ checksum "Gemfile.lock" }}
       - run: |
+          bundle install
           bundle exec rails test
   build:
     docker:
