@@ -1,4 +1,4 @@
-FROM ruby:2.4.5
+FROM ruby:2.4
 LABEL maintainer="Andrew Wippler <andrew.wippler@gmail.com>"
 
 ENV RAILS_ENV=production \
@@ -15,14 +15,11 @@ RUN apt-get update && \
         postgresql-client \
         nodejs \
         && \
-    apt-get dist-upgrade -y && \
-    apt-get autoremove -y && \
-    apt-get autoclean -y && rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 ADD . .
 
-RUN gem update bundler --pre
-RUN bundle install
-
-RUN RAILS_GROUPS=assets bundle exec rake assets:precompile
+RUN gem update bundler --pre && \
+    bundle install && \
+    RAILS_GROUPS=assets bundle exec rake assets:precompile
