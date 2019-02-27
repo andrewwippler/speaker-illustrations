@@ -1,0 +1,54 @@
+version: 2
+jobs:
+  precacheGems:
+    docker:
+      - image: circleci/ruby:2.4-node-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "Gemfile.lock" }}
+      - run: bundle install
+      - save_cache:
+          key: dependency-cache-{{ checksum "Gemfile.lock" }}
+          paths:
+            - vendor/bundle
+  test:
+    docker:
+      - image: circleci/ruby:2.4-node-browsers
+    steps:
+      - checkout
+      - restore_cache:
+          key: dependency-cache-{{ checksum "Gemfile.lock" }}
+      - run: |
+          bundle exec rails test
+  build:
+    docker:
+      - image: circleci/node:8-browsers
+    steps:
+      - checkout
+      - setup_remote_docker:
+          docker_layer_caching: true
+          version: 17.09.0-ce
+      - restore_cache:
+          key: dependency-cache-{{ checksum "Gemfile.lock" }}
+      - run: |
+          docker build -t d.wplr.rocks/speaker_illustrations:latest -t andrewwippler/speaker_illustrations:latest -t andrewwippler/speaker_illustrations:$CIRCLE_SHA1 .
+          docker login -u $DOCKERHOME_USERNAME -p $DOCKERHOME_PASSWORD d.wplr.rocks
+          docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+          docker push d.wplr.rocks/speaker_illustrations
+          docker push andrewwippler/speaker_illustrations
+workflows:
+  version: 2
+  build_and_deploy:
+    jobs:
+      - precacheGems
+      - test:
+          requires:
+            - precacheGems
+      - build:
+          requires:
+            - precacheGems
+            - test
+          filters:
+            branches:
+              only: master
