@@ -23,7 +23,9 @@ class IllustrationsController < ApplicationController
     @tag_results = Tag.all.where('name LIKE ?', "%#{@q}%").order(:name)
     search_res = Illustration.order(:title)
     content_res = search_res.where('content LIKE ?', "%#{@q}%")
-    title_res= = search_res.where('title LIKE ?', "%#{@q}%")
+    title_res = search_res.where('title LIKE ?', "%#{@q}%")
+
+    @rows_per_column = (@tag_results.count.to_f / 3.to_f).ceil
 
     content_res.each do |sr|
       sr.content = sr.content[0..250].gsub(/\s\w+\s*$/,'...').gsub(/#{@q}/i, "<b>#{@q}</b>")
